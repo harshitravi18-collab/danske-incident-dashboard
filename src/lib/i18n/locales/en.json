@@ -1,0 +1,125 @@
+{
+  "app": {
+    "title": "Team Incident Dashboard",
+    "subtitle": "Track and manage incidents across the team",
+    "brand": "Danske Bank",
+    "area": "Incident Management"
+  },
+
+  "common": {
+    "all": "All",
+    "unassigned": "Unassigned",
+    "loading": "Loading…",
+    "retry": "Retry",
+    "error": "Something went wrong",
+    "save": "Save",
+    "cancel": "Cancel",
+    "saved": "Saved",
+    "reset": "Reset"
+  },
+
+  "filters": {
+    "searchPlaceholder": "Search by title…",
+
+    "allStatuses": "All statuses",
+    "open": "Open",
+    "inProgress": "In progress",
+    "resolved": "Resolved",
+
+    "allSeverities": "All severities",
+    "low": "Low",
+    "medium": "Medium",
+    "high": "High",
+    "critical": "Critical",
+
+    "allAssignees": "All assignees",
+    "unassigned": "Unassigned",
+
+    "createdNewest": "Created (newest)",
+    "createdOldest": "Created (oldest)",
+    "titleAZ": "Title (A–Z)",
+    "severityHighToLow": "Severity (high → low)",
+    "statusAZ": "Status (A–Z)"
+  },
+
+  "sort": {
+    "createdAt_desc": "Created (newest)",
+    "createdAt_asc": "Created (oldest)",
+    "title_asc": "Title (A–Z)",
+    "severity_desc": "Severity (high → low)",
+    "status_asc": "Status (A–Z)"
+  },
+
+  "status": {
+    "Open": "Open",
+    "In Progress": "In progress",
+    "Resolved": "Resolved"
+  },
+
+  "severity": {
+    "Low": "Low",
+    "Medium": "Medium",
+    "High": "High",
+    "Critical": "Critical"
+  },
+
+  "incidents": {
+    "table": {
+      "title": "Title",
+      "status": "Status",
+      "severity": "Severity",
+      "assignee": "Assignee",
+      "created": "Created"
+    },
+    "empty": "No incidents match your filters."
+  },
+
+  "actions": {
+    "createIncident": "Create incident",
+    "updateIncident": "Update incident"
+  },
+
+  "form": {
+    "title": "Title",
+    "description": "Description",
+    "severity": "Severity",
+    "assignee": "Assignee",
+    "required": "This field is required",
+    "titleMin": "Title must be at least 3 characters",
+    "descriptionMin": "Description must be at least 10 characters"
+  },
+  "table": {
+    "title": "Title",
+    "status": "Status",
+    "severity": "Severity",
+    "assignee": "Assignee",
+    "created": "Created"
+  },
+
+  "drawer": {
+    "title": "Incident details",
+    "loading": "Loading…",
+    "description": "Description",
+    "status": "Status",
+    "severity": "Severity",
+    "assignee": "Assignee",
+    "created": "Created",
+    "statusHistory": "Status history",
+    "noHistory": "No history available",
+    "changedBy": "by",
+    "unknownUser": "Unknown user",
+    "loadError": "Couldn’t load incident",
+    "updateStatus": "Update status",
+    "updateAssignee": "Update assignee",
+    "updateError": "Couldn’t save changes. Please try again."
+  },
+
+  "create": {
+    "open": "Create incident",
+    "title": "Create incident",
+    "submit": "Create",
+    "error": "Couldn’t create incident. Please try again.",
+    "titlePlaceholder": "Short summary (e.g. “Payment gateway error”)",
+    "descriptionPlaceholder": "Describe what happened, impact, and any relevant context."
+  }
+}

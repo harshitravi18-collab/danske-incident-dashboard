@@ -29,6 +29,7 @@ export interface CreateIncidentInput {
   title: string;
   description: string;
   severity: IncidentSeverity;
+  status: IncidentStatus;
   assigneeId: string | null;
 }
 

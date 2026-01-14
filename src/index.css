@@ -8,12 +8,16 @@
     sans-serif;
   line-height: 1.5;
   font-weight: 400;
-  color: #213547;
-  background-color: #ffffff;
+
+  color: #0b1f2a;
+  background-color: #f6f7f8;
+
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --page-max: 1240px;
 }
 
 *,
@@ -25,10 +29,91 @@
 body {
   margin: 0;
   min-height: 100vh;
+  background: #f6f7f8;
 }
 
 #root {
-  max-width: 1280px;
+  min-height: 100vh;
+}
+
+/* Layout shell */
+.page {
+  max-width: var(--page-max);
   margin: 0 auto;
-  padding: 2rem;
+  padding: 16px 16px 48px;
+}
+
+.topbar {
+  max-width: var(--page-max);
+  margin: 0 auto;
+  height: 64px;
+  padding: 0 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.pageHeader {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.h1 {
+  font-size: 30px;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin: 0;
+  font-weight: 700;
+}
+
+.muted {
+  color: rgba(11, 31, 42, 0.65);
+  margin: 4px 0 0;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.045);
+}
+
+/* Make AntD Table match card rounding nicely */
+.ant-table {
+  margin-top: 8px !important;
+  border-radius: 16px;
+  overflow: hidden;
+}
+.ant-table-thead > tr > th {
+  color: rgba(11, 31, 42, 0.75);
+  font-weight: 650;
+  background: #f7f8f9;
+}
+.ant-btn {
+  font-weight: 600;
+}
+/* Soft section for search & filters (like Danske homepage) */
+.filtersSection {
+  border-radius: 16px;
+  padding: 14px;
+  margin-bottom: 14px;
+
+  /* softer than a card */
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+/* Results feel more “embedded”, less floating */
+.resultsSection {
+  border-radius: 16px;
+  border: 1px solid rgba(0, 0, 0, 0);
+}
+
+/* Remove heavy card shadow */
+.filtersSection,
+.resultsSection {
+  box-shadow: none;
 }

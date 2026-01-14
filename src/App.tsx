@@ -1,11 +1,17 @@
-import "./App.css";
+import { Navigate, Route, Routes } from "react-router-dom";
+import { IncidentsPage } from "./features/incidents/IncidentsPage";
+import { AppShell } from "./components/AppShell";
 
-function App() {
+export default function App() {
   return (
-    <div className="app">
-      <h1>Team Incident Dashboard - Starter Project</h1>
-    </div>
+    <AppShell>
+      <Routes>
+        <Route path="/" element={<Navigate to="/incidents" replace />} />
+        <Route path="/incidents" element={<IncidentsPage />}>
+          <Route path=":incidentId" element={null} />
+        </Route>
+        <Route path="*" element={<Navigate to="/incidents" replace />} />
+      </Routes>
+    </AppShell>
   );
 }
-
-export default App;
