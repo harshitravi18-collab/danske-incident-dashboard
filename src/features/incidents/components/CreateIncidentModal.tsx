@@ -1,9 +1,5 @@
 import { Modal, Form, Input, Select, Button, Space, Alert } from "antd";
-import type {
-  IncidentSeverity,
-  User,
-  CreateIncidentInput,
-} from "../../../api/types";
+import type { IncidentSeverity, User, CreateIncidentInput } from "@api/types";
 import { useCreateIncidentMutation } from "../hooks";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";

@@ -1,5 +1,5 @@
 import { Outlet, useNavigate, useParams } from "react-router-dom";
-import type { Incident } from "../../api/types";
+import type { Incident } from "@api/types";
 import { useIncidentsQuery, useUsersQuery } from "./hooks";
 import {
   IncidentFiltersBar,

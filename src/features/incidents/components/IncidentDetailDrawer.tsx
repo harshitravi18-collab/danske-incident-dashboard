@@ -1,5 +1,5 @@
 import { Drawer, Button } from "antd";
-import type { User } from "../../../api/types";
+import type { User } from "@api/types";
 import { useIncidentQuery } from "../hooks";
 import { IncidentEditPanel } from "./IncidentEditPanel";
 import { IncidentReadOnlyDetails } from "./IncidentReadOnlyDetails";

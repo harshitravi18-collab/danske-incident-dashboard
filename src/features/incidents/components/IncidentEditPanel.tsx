@@ -1,6 +1,6 @@
 import { Alert, Button, Select, Space, message } from "antd";
 import { useEffect, useMemo, useState } from "react";
-import type { Incident, IncidentStatus, User } from "../../../api/types";
+import type { Incident, IncidentStatus, User } from "@api/types";
 import { useUpdateIncidentMutation } from "../hooks";
 import { useTranslation } from "react-i18next";
 
