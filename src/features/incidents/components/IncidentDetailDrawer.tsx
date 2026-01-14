@@ -28,8 +28,8 @@ export function IncidentDetailDrawer({
       title={t("drawer.title")}
       open={isOpen}
       onClose={onClose}
-      width={520}
-      destroyOnClose
+      size={520}
+      destroyOnHidden
     >
       {q.isLoading ? (
         <div>{t("drawer.loading")}</div>

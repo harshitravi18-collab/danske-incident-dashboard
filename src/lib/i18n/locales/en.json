@@ -84,7 +84,9 @@
     "description": "Description",
     "severity": "Severity",
     "assignee": "Assignee",
-    "required": "This field is required"
+    "required": "This field is required",
+    "titleMin": "Title must be at least 3 characters",
+    "descriptionMin": "Description must be at least 10 characters"
   },
   "table": {
     "title": "Title",
@@ -110,5 +112,14 @@
     "updateStatus": "Update status",
     "updateAssignee": "Update assignee",
     "updateError": "Couldn’t save changes. Please try again."
+  },
+
+  "create": {
+    "open": "Create incident",
+    "title": "Create incident",
+    "submit": "Create",
+    "error": "Couldn’t create incident. Please try again.",
+    "titlePlaceholder": "Short summary (e.g. “Payment gateway error”)",
+    "descriptionPlaceholder": "Describe what happened, impact, and any relevant context."
   }
 }

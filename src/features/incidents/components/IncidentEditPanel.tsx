@@ -64,7 +64,7 @@ export function IncidentEditPanel({ incident, users }: Props) {
     <div style={{ marginBottom: 16 }}>
       {contextHolder}
 
-      <Space direction="vertical" style={{ width: "100%" }} size={10}>
+      <Space orientation="vertical" style={{ width: "100%" }} size={10}>
         <div>
           <div style={{ fontSize: 12, opacity: 0.7, marginBottom: 6 }}>
             {t("drawer.updateStatus")}
@@ -98,7 +98,7 @@ export function IncidentEditPanel({ incident, users }: Props) {
           <Alert
             type="error"
             showIcon
-            message={t("drawer.updateError")}
+            title={t("drawer.updateError")}
             action={
               <Button size="small" onClick={onSave}>
                 {t("common.retry")}

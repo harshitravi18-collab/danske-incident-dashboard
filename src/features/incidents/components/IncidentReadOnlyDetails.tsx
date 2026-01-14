@@ -13,6 +13,13 @@ const STATUS_COLOR: Record<IncidentStatus, string> = {
   Resolved: "green",
 };
 
+const SEVERITY_COLOR: Record<Incident["severity"], string> = {
+  Low: "blue",
+  Medium: "gold",
+  High: "orange",
+  Critical: "red",
+};
+
 export function IncidentReadOnlyDetails({ incident, usersById }: Props) {
   const { t } = useTranslation();
 
@@ -34,7 +41,9 @@ export function IncidentReadOnlyDetails({ incident, usersById }: Props) {
         </Descriptions.Item>
 
         <Descriptions.Item label={t("table.severity")}>
-          <Tag>{t(`severity.${incident.severity}`, incident.severity)}</Tag>
+          <Tag color={SEVERITY_COLOR[incident.severity]}>
+            {t(`severity.${incident.severity}`, incident.severity)}
+          </Tag>
         </Descriptions.Item>
 
         <Descriptions.Item label={t("table.assignee")}>

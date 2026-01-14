@@ -9,6 +9,8 @@ import { IncidentTable } from "./components/IncidentTable";
 import { IncidentDetailDrawer } from "./components/IncidentDetailDrawer";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Button } from "antd";
+import { CreateIncidentModal } from "./components/CreateIncidentModal";
 
 const SEVERITY_RANK: Record<Incident["severity"], number> = {
   Low: 1,
@@ -86,6 +88,8 @@ export function IncidentsPage() {
     return Object.fromEntries((usersQ.data ?? []).map((u) => [u.id, u.name]));
   }, [usersQ.data]);
 
+  const [isCreateOpen, setCreateOpen] = useState(false);
+
   return (
     <div className="page">
       <header className="pageHeader">
@@ -94,7 +98,9 @@ export function IncidentsPage() {
           <p className="muted">{t("app.subtitle")}</p>
         </div>
         <div className="headerRight">
-          {/* to do  Step 5 will add "Create incident" button/modal here */}
+          <Button type="primary" onClick={() => setCreateOpen(true)}>
+            {t("create.open")}
+          </Button>
         </div>
       </header>
 
@@ -127,6 +133,13 @@ export function IncidentsPage() {
           />
         )}
       </section>
+
+      <CreateIncidentModal
+        open={isCreateOpen}
+        onClose={() => setCreateOpen(false)}
+        users={usersQ.data ?? []}
+        onCreated={(id) => navigate(`/incidents/${id}`)}
+      />
 
       {/* Drawer route */}
       <Outlet />
