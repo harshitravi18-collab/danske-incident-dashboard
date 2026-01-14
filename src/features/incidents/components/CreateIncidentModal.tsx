@@ -8,8 +8,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslation } from "react-i18next";
 
 const schema = z.object({
-  title: z.string().min(3, "form.titleMin").catch(""),
-  description: z.string().min(10, "form.descriptionMin").catch(""),
+  title: z.string().trim().min(3, "form.titleMin"),
+  description: z.string().trim().min(10, "form.descriptionMin"),
   severity: z.enum(["Low", "Medium", "High", "Critical"]),
   assigneeId: z.string().nullable().optional(),
 });
@@ -31,7 +31,7 @@ export function CreateIncidentModal({
 }: Props) {
   const { t } = useTranslation();
   const create = useCreateIncidentMutation();
-  const LABEL_COL_STYLE = { width: 90 }; // consistent label width
+  const LABEL_COL_STYLE = { width: 90 };
 
   const {
     register,
@@ -43,6 +43,7 @@ export function CreateIncidentModal({
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
     mode: "onChange",
+    shouldFocusError: true,
     defaultValues: {
       title: "",
       description: "",
@@ -115,6 +116,7 @@ export function CreateIncidentModal({
                   shouldValidate: true,
                 })
               }
+              data-testid="create-incident-title"
               placeholder={t("create.titlePlaceholder")}
               autoFocus
             />
@@ -139,6 +141,7 @@ export function CreateIncidentModal({
                   shouldValidate: true,
                 })
               }
+              data-testid="create-incident-description"
               placeholder={t("create.descriptionPlaceholder")}
               autoSize={{ minRows: 4, maxRows: 8 }}
             />
@@ -149,6 +152,7 @@ export function CreateIncidentModal({
             validateStatus={errors.severity ? "error" : ""}
             help={errors.severity ? t("form.required") : null}
             style={{ marginBottom: 0 }}
+            data-testid="create-incident-severity"
           >
             <Select
               value={watch("severity")}
@@ -165,6 +169,7 @@ export function CreateIncidentModal({
           <Form.Item
             label={<span style={LABEL_COL_STYLE}>{t("form.assignee")}</span>}
             style={{ marginBottom: 0 }}
+            data-testid="create-incident-assignee"
           >
             <Select
               allowClear
@@ -199,6 +204,7 @@ export function CreateIncidentModal({
               type="primary"
               htmlType="submit"
               loading={isSubmitting || create.isPending}
+              data-testid="create-incident-submit"
             >
               {t("create.submit")}
             </Button>
