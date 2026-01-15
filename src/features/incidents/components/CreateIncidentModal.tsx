@@ -59,7 +59,9 @@ export function CreateIncidentModal({
   // Reset mutation state when modal opens
   useEffect(() => {
     if (open) create.reset();
-  }, [open, create]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, create.reset]);
 
   const severityOptions: { value: IncidentSeverity; label: string }[] = [
     { value: "Low", label: t("severity.Low") },
