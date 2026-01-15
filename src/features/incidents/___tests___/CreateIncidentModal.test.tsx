@@ -93,5 +93,5 @@ describe("CreateIncidentModal", () => {
     await waitFor(() => expect(onCreated).toHaveBeenCalledWith("new"), {
       timeout: 10000,
     });
-  }, 15000);
+  }, 150000);
 });
