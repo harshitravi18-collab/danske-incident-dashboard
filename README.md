@@ -305,74 +305,79 @@ Compact view with collapsed filters and modal details
   - Table scrolls horizontally on small screens
   - Incident details open in full-screen modal
   - Touch-friendly button sizes (40px min height)
- ## CI/CD Pipeline
 
-  The project uses **GitHub Actions** for automated testing and validation on every push and pull request.
+## CI/CD Pipeline
 
-  ### Pipeline Overview
+The project uses **GitHub Actions** for automated testing and validation on every push and pull request.
 
-  The CI pipeline runs in two parallel jobs:
+### Pipeline Overview
 
-  #### 1. **Lint, Format, Unit Tests & Build** (`unit_lint_build`)
+The CI pipeline runs in two parallel jobs:
 
-  Runs on every push and pull request.
+#### 1. **Lint, Format, Unit Tests & Build** (`unit_lint_build`)
 
-  **Steps**:
-  - ✅ Code format check (Prettier)
-  - ✅ Linting (ESLint)
-  - ✅ Unit & component tests (Vitest)
-  - ✅ Production build (TypeScript + Vite)
+Runs on every push and pull request.
 
-  **Fails if any step fails** - prevents merging broken code.
+**Steps**:
 
-  #### 2. **E2E Tests** (`e2e`)
+- ✅ Code format check (Prettier)
+- ✅ Linting (ESLint)
+- ✅ Unit & component tests (Vitest)
+- ✅ Production build (TypeScript + Vite)
 
-  Runs **after** `unit_lint_build` succeeds, ensuring the app builds before testing.
+**Fails if any step fails** - prevents merging broken code.
 
-  **Steps**:
-  - ✅ Install Playwright browsers
-  - ✅ Build production bundle
-  - ✅ Run E2E tests (Playwright)
-  - ✅ Upload test report on failure
+#### 2. **E2E Tests** (`e2e`)
 
-  **Timeout**: 20 minutes
+Runs **after** `unit_lint_build` succeeds, ensuring the app builds before testing.
 
-  **Artifacts**: On failure, uploads `playwright-report/` for debugging.
+**Steps**:
 
-  ### Configuration
+- ✅ Install Playwright browsers
+- ✅ Build production bundle
+- ✅ Run E2E tests (Playwright)
+- ✅ Upload test report on failure
 
-  **File**: [`.github/workflows/ci.yml`](.github/workflows/ci.yml)
+**Timeout**: 20 minutes
 
-  **Key settings**:
-  - **Node.js**: 20
-  - **pnpm**: 9
-  - **Concurrency**: Cancels previous runs on new push (faster feedback)
-  - **Cache**: Uses pnpm lock file for fast dependency installation
+**Artifacts**: On failure, uploads `playwright-report/` for debugging.
 
-  ### Running Locally Before Push
+### Configuration
 
-  To match CI behavior locally:
+**File**: [`.github/workflows/ci.yml`](.github/workflows/ci.yml)
 
-  ```bash
-  # Format check
-  pnpm format:check
+**Key settings**:
 
-  # Lint
-  pnpm lint
+- **Node.js**: 20
+- **pnpm**: 9
+- **Concurrency**: Cancels previous runs on new push (faster feedback)
+- **Cache**: Uses pnpm lock file for fast dependency installation
 
-  # Unit tests
-  pnpm test
+### Running Locally Before Push
 
-  # Build (TypeScript check + bundle)
-  pnpm build
+To match CI behavior locally:
 
-  # E2E tests (optional, slower)
-  pnpm e2e
+```bash
+# Format check
+pnpm format:check
 
-  # Or run all at once:
-  pnpm format:check && pnpm lint && pnpm test && pnpm build && pnpm e2e
-  ```
-  ### Playwright Report
+# Lint
+pnpm lint
+
+# Unit tests
+pnpm test
+
+# Build (TypeScript check + bundle)
+pnpm build
+
+# E2E tests (optional, slower)
+pnpm e2e
+
+# Or run all at once:
+pnpm format:check && pnpm lint && pnpm test && pnpm build && pnpm e2e
+```
+
+### Playwright Report
 
 When E2E tests fail in CI, an artifact is uploaded. To view:
 
