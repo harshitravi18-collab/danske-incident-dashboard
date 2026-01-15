@@ -29,20 +29,20 @@ export function IncidentFiltersBar({
 }: Props) {
   const { t } = useTranslation();
   return (
-    <Space wrap style={{ width: "100%", justifyContent: "space-between" }}>
+    <Space wrap style={{ width: "100%", justifyContent: "flex-start" }}>
       <Space wrap>
         <Input.Search
           allowClear
           placeholder={t("filters.searchPlaceholder")}
           value={value.query}
           onChange={(e) => onChange({ ...value, query: e.target.value })}
-          style={{ width: 320 }}
+          style={{ width: 250 }}
         />
 
         <Select
           value={value.status}
           onChange={(v) => onChange({ ...value, status: v })}
-          style={{ width: 160 }}
+          style={{ width: 210 }}
           options={[
             { value: "all", label: t("filters.allStatuses") },
             { value: "Open", label: t("filters.open") },
@@ -54,7 +54,7 @@ export function IncidentFiltersBar({
         <Select
           value={value.severity}
           onChange={(v) => onChange({ ...value, severity: v })}
-          style={{ width: 160 }}
+          style={{ width: 210 }}
           options={[
             { value: "all", label: t("filters.allSeverities") },
             { value: "Low", label: t("filters.low") },
@@ -67,7 +67,7 @@ export function IncidentFiltersBar({
         <Select
           value={value.assigneeId}
           onChange={(v) => onChange({ ...value, assigneeId: v })}
-          style={{ width: 180 }}
+          style={{ width: 210 }}
           loading={isUsersLoading}
           options={[
             { value: "all", label: t("filters.allAssignees") },
@@ -80,7 +80,7 @@ export function IncidentFiltersBar({
       <Select
         value={sortKey}
         onChange={(v) => onSortChange(v)}
-        style={{ width: 180 }}
+        style={{ width: 210 }}
         options={[
           { value: "createdAt_desc", label: t("filters.createdNewest") },
           { value: "createdAt_asc", label: t("filters.createdOldest") },
