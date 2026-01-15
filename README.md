@@ -1,157 +1,278 @@
-# Team Incident Dashboard - Starter Project
+# Team Incident Dashboard
 
-A minimal React + TypeScript + Vite starter project for the coding challenge.
+A React + TypeScript incident management application built with Vite, featuring real-time data persistence, filtering, sorting, and incident lifecycle management.
 
-> **Note**: This is a starter project for a coding challenge. See [candidate-brief.md](candidate-brief.md) for the full requirements and task description.
+> **Note**: This is a coding challenge starter project. See [candidate-brief.md](candidate-brief.md) for requirements.
 
-## Getting Started
+## Quick Start
 
 ### Prerequisites
 
-- Node.js 18+
-- npm or yarn
+- **Node.js 18+**
+- **pnpm** (recommended) or npm/yarn
 
-### Installation
-
-```bash
-npm install
-```
-
-### Development
+### Installation & Running
 
 ```bash
-npm run dev
+# Install dependencies
+pnpm install
+
+# Development server (with live reload)
+pnpm dev
+# App opens at http://localhost:5173
+
+# Run tests (unit + component tests)
+pnpm test
+
+# Run E2E tests (Playwright)
+pnpm e2e           # Headless mode
+pnpm e2e:ui        # Interactive UI mode
+
+# Build for production
+pnpm build
+
+# Preview production build
+pnpm preview
+
+# Code quality
+pnpm lint          # ESLint check
+pnpm format        # Prettier format
+pnpm format:check  # Check formatting
 ```
 
-Opens the app at [http://localhost:5173](http://localhost:5173)
+The app opens at http://localhost:5173 with Vite hot-reload. Changes to React components, styles, and i18n files reflect instantly.
 
-### Testing
+### Test Setup:
 
-```bash
-npm test
+- setup.ts polyfills matchMedia, ResizeObserver (needed by Ant Design)
+- render.tsx exports renderWithProviders() which wraps components in React Query + React Router
+
+## Architecture & Key Decisions
+
+### State Management: React Query (TanStack Query)
+
+### Why:
+
+Server-state management with built-in caching, refetching, and synchronization.
+
+### Benefits:
+
+- Automatic request deduplication & caching
+- Background refetching with configurable stale times
+- Optimistic updates for better UX
+- Query invalidation patterns for cache coherence
+
+### Implementation:
+
+- Query keys defined in index.ts for centralized cache management
+- Custom hooks: useIncidentsQuery(), useCreateIncidentMutation(), useUpdateIncidentMutation()
+- Default cache stale time: 15 seconds (see queryClient.ts)
+
+```typescript
+// Example: Queries auto-invalidate & refetch on mutation success
+useCreateIncidentMutation(); // onSuccess invalidates incident list cache
 ```
 
-### Build
+Data Fetching: Mock API with localStorage Persistence
 
-```bash
-npm run build
+### Why:
+
+No backend required; data survives page refreshes for a real developer experience.
+
+### How:
+
+mockApi.ts intercepts fetch() calls to /api/\* endpoints
+Data persisted in browser localStorage
+300ms simulated delay (disabled in tests for speed)
+Initialized automatically in main.tsx
+
+### Available Endpoints:
+
+| Method | Endpoint             | pURPOSE                     |
+| ------ | -------------------- | --------------------------- |
+| GET    | `/api/incidents`     | Fetch all incidents         |
+| GET    | `/api/incidents/:id` | Fetch incident by ID        |
+| POST   | `/api/incidents`     | Create new incident         |
+| PATCH  | `/api/incidents/:id` | Update incident             |
+| DELETE | `/api/incidents/:id` | Delete incident             |
+| GET    | `/api/users`         | Fetch users for assignment  |
+| POST   | `/api/reset`         | Reset data to seed defaults |
+
+**API Reset & Seed Data**
+To reset the dashboard to seed data:
+
+```typescript
+// Browser console
+await fetch("/api/reset", { method: "POST" });
+location.reload();
 ```
+
+See seedData.ts for default incidents and users.
 
 ## Project Structure
 
 ```
 src/
-├── api/                  # Mock API with localStorage persistence
-│   ├── index.ts          # API exports
-│   ├── mockApi.ts        # API client with simulated delay
-│   ├── seedData.ts       # Default data for incidents and users
-│   ├── storage.ts        # localStorage persistence layer
-│   └── types.ts          # TypeScript types
+├── api/                                  # Data layer & mock API
+│ ├── index.ts                            # Public API exports
+│ ├── mockApi.ts                          # HTTP interceptor (300ms delay)
+│ ├── seedData.ts                         # Default incidents & users
+│ ├── storage.ts                          # localStorage abstraction
+│ ├── types.ts                            # Incident, User, status types
+│ └── mockApi.test.ts                     # API behavior tests
+│
+├── services/                             # Business logic & fetch wrappers
+│ ├── http.ts                             # fetchJson() helper with error handling
+│ ├── incidents.ts                        # CRUD operations for incidents
+│ └── users.ts                            # User listing service
+│
+├── features/incidents/                   # Feature-scoped components & logic
+│ ├── IncidentsPage.tsx                   # Main page with filtering/sorting
+│ ├── hooks/
+│ │ └── index.ts                          # React Query hooks & query keys
+│ ├── components/
+│ │ ├── IncidentTable.tsx                 # Sortable/paginated table
+│ │ ├── IncidentFiltersBar.tsx            # Query, status, severity, assignee filters
+│ │ ├── CreateIncidentModal.tsx           # Form for new incidents (Zod validation)
+│ │ ├── IncidentDetailDrawer.tsx          # Read-only details sidebar
+│ │ ├── IncidentEditPanel.tsx             # In-drawer edit form
+│ │ └── IncidentReadOnlyDetails.tsx
+│ └── __tests__/                          # Component & integration tests
+│
+├── components/
+│ └── AppShell.tsx                        # Header layout with brand & title
+│
+├── lib/
+│ ├── queryClient.ts                      # React Query configuration
+│ ├── theme/
+│ │ └── antdTheme.ts                      # Danske Bank brand colors & Ant Design customization
+│ └── i18n/
+│ ├── index.ts                            # i18next initialization
+│ └── locales/
+│ └── en.json                             # English translations
+│
 ├── test/
-│   └── setup.ts          # Test setup
-├── App.css
-├── App.test.tsx
-├── App.tsx
-├── index.css
-├── main.tsx
-└── vite-env.d.ts
+│ ├── setup.ts                            # Vitest setup (polyfills: matchMedia, ResizeObserver)
+│ └── render.tsx                          # Test utilities (renderWithProviders)
+│
+├── App.tsx                               # Router & route definitions
+├── main.tsx                              # React entry point & provider setup
+├── index.css                             # Global styles
+└── App.css
 ```
 
-## Mock API
+## Key Design Decisions
 
-The starter includes a mock API that intercepts `fetch()` requests to `/api/*` endpoints. Data is persisted in localStorage and survives page refreshes.
+| Decision                | Rationale                                                                     |
+| ----------------------- | ----------------------------------------------------------------------------- |
+| React Query             | Eliminates Redux boilerplate; built for server-state; auto caching/refetch    |
+| Mock API                | Realistic dev experience without backend; localStorage persistence            |
+| Ant Design              | Rich component library; responsive tables, modals, drawers; Danske theme-able |
+| Zod validation          | Type-safe schema validation for forms; runtime type checking                  |
+| React Router v7         | Nested routes for detail view; URL-driven state (/incidents/:incidentId)      |
+| i18n                    | Foundation for multi-language support (currently English only)                |
+| Feature-based structure | Scales well; incidents feature self-contained & relocatable                   |
 
-The mock API is automatically initialized in `main.tsx`.
+## Trade-offs & Limitations
 
-### Available Endpoints
+What Works Well ✅
 
-| Method | Endpoint             | Description            |
-| ------ | -------------------- | ---------------------- |
-| GET    | `/api/incidents`     | List all incidents     |
-| GET    | `/api/incidents/:id` | Get incident by ID     |
-| POST   | `/api/incidents`     | Create new incident    |
-| PATCH  | `/api/incidents/:id` | Update incident        |
-| DELETE | `/api/incidents/:id` | Delete incident        |
-| GET    | `/api/users`         | List all users         |
-| POST   | `/api/reset`         | Reset data to defaults |
+Responsive design: Mobile, tablet, desktop layouts via Ant Design grid system
 
-### Usage Example
+- Fast local development: Mock API with instant feedback
+- Type safety: Full TypeScript with strict mode
+- Testing: Component tests + E2E via Playwright
+- Theming: Danske Bank brand colors + Ant Design token system
 
-Use standard `fetch()` calls just like you would with a real REST API:
+Limitations & Future Improvements 🔧
 
-```typescript
-// Fetch all incidents
-const response = await fetch("/api/incidents");
-const incidents = await response.json();
+| **Limitation**         | **Impact**                                 | **Would Improve With**                                     |
+| ---------------------- | ------------------------------------------ | ---------------------------------------------------------- |
+| No error boundaries    | One component crash breaks app             | Add React Error Boundary wrapper; error recovery UI        |
+| Single-language        | Only English supported                     | Complete i18n setup (EN, DK, etc.); use i18n workflow      |
+| No real authentication | Anyone can edit any incident               | Auth service; role-based access control (RBAC); JWT tokens |
+| localStorage only      | Data lost on browser clear                 | Real API backend                                           |
+| Limited filtering      | No date-range, priority, or custom filters | Advanced filter builder; saved filter presets              |
 
-// Fetch a single incident
-const response = await fetch("/api/incidents/inc-1");
-const incident = await response.json();
+What I'd Prioritize First
 
-// Create an incident
-const response = await fetch("/api/incidents", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    title: "New issue",
-    description: "Description here",
-    severity: "Medium",
-    assigneeId: "user-1",
-  }),
-});
-const newIncident = await response.json();
+1. **Real backend API** → Swap mock API layer; same service interfaces
+2. **Error boundaries & error UI** → Graceful failure; user feedback
+3. **Complete i18n** → Multi-language dashboard
+4. **Authentication & RBAC** → Security & data isolation
+5. **Advanced filtering & saved views** → Power-user features
 
-// Update an incident
-const response = await fetch("/api/incidents/inc-1", {
-  method: "PATCH",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    status: "In Progress",
-    assigneeId: "user-2",
-  }),
-});
-const updated = await response.json();
+## Technology Stack
 
-// Delete an incident
-await fetch("/api/incidents/inc-1", { method: "DELETE" });
+| **Layer**            | **Technology**        | **Version** |
+| -------------------- | --------------------- | ----------- |
+| Runtime              | Node.js               | 18+         |
+| Framework            | React                 | 18.3.1      |
+| Language             | TypeScript            | 5.6.2       |
+| Build Tool           | Vite                  | 6.0.5       |
+| State Management     | React Query           | 5.90.17     |
+| UI Component Library | Ant Design            | 6.2.0       |
+| Routing              | React Router          | 7.12.0      |
+| Form Management      | React Hook Form       | 7.71.1      |
+| Validation           | Zod                   | 4.3.5       |
+| Internationalization | i18next               | 25.7.4      |
+| Unit Testing         | Vitest                | 4.0.17      |
+| Component Testing    | React Testing Library | 16.1.0      |
+| E2E Testing          | Playwright            | 1.57.0      |
+| Linting              | ESLint                | 9.17.0      |
+| Formatting           | Prettier              | 3.7.4       |
 
-// Get users for assignee dropdown
-const response = await fetch("/api/users");
-const users = await response.json();
+## Use of AI Tooling
 
-// Reset data to defaults
-await fetch("/api/reset", { method: "POST" });
-```
+**GitHub Copilot** was used strategically during development:
 
-### Data Types
+1. **Mock API boilerplate** → AI generated fetch interceptor pattern; refined error handling & validation
+2. **Component templates** → AI scaffolded form layouts; refactored for state management & accessibility
+3. **Type definitions** → AI inferred Incident, User, and StatusHistory types; validated against requirements
+4. **Documentation** → AI helped structure Tables; I verified accuracy against implementation
 
-```typescript
-type IncidentStatus = "Open" | "In Progress" | "Resolved";
-type IncidentSeverity = "Low" | "Medium" | "High" | "Critical";
+**Manual work**
 
-interface Incident {
-  id: string;
-  title: string;
-  description: string;
-  status: IncidentStatus;
-  severity: IncidentSeverity;
-  assigneeId: string | null;
-  createdAt: string;
-  updatedAt: string;
-  statusHistory: StatusHistoryEntry[];
-}
+- All custom hooks & query logic (React Query patterns)
+- Filtering & sorting algorithm in IncidentsPage.tsx
+- i18n setup & locale keys
+- Playwright E2E test flows
+- Error handling & edge cases
+- This README
 
-interface User {
-  id: string;
-  name: string;
-  email: string;
-}
-```
+## Screenshots
 
-## Stack
+### Desktop View
 
-- **React 18** - UI library
-- **TypeScript** - Type safety
-- **Vite** - Build tool
-- **Vitest** - Testing
-- **React Testing Library** - Component testing
+<img width="1917" height="877" alt="image" src="https://github.com/user-attachments/assets/0e1d2920-9da1-4fee-a302-96fa270ea46e" />
+<img width="1919" height="910" alt="image" src="https://github.com/user-attachments/assets/45872708-53a4-47b9-b62f-35055fbaea06" />
+Team Incident Dashboard - Desktop
+
+Incidents table with filtering, sorting, and detail drawer (right sidebar)
+
+- **Layout**: 3-column (filters, table, drawer)
+- **Features**:
+  - Real-time search by incident title
+  - Filter by status (Open, In Progress, Resolved)
+  - Filter by severity (Low, Medium, High, Critical)
+  - Assign to team member
+  - Sort by date created, title, or severity
+  - Click row → view/edit in drawer
+  - Create new incident button (top)
+
+### Mobile View
+
+<img width="717" height="762" alt="image" src="https://github.com/user-attachments/assets/ed5bdf6a-6fa5-4650-88e4-ceef0d96ba15" />
+<img width="685" height="801" alt="image" src="https://github.com/user-attachments/assets/8c88cec1-b985-4de3-83e9-ac7db4c08037" />
+<img width="739" height="795" alt="image" src="https://github.com/user-attachments/assets/b1684a57-d0c1-43ab-b8b4-5a22dd2ed6be" />
+
+Team Incident Dashboard - Mobile
+
+Compact view with collapsed filters and modal details
+
+- **Layout**: Full-width stacked (filters collapsible, table full width, drawer as modal)
+- **Features**:
+  - Responsive filter bar with fewer options visible
+  - Table scrolls horizontally on small screens
+  - Incident details open in full-screen modal
+  - Touch-friendly button sizes (40px min height)
