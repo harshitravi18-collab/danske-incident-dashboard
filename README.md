@@ -305,3 +305,86 @@ Compact view with collapsed filters and modal details
   - Table scrolls horizontally on small screens
   - Incident details open in full-screen modal
   - Touch-friendly button sizes (40px min height)
+ ## CI/CD Pipeline
+
+  The project uses **GitHub Actions** for automated testing and validation on every push and pull request.
+
+  ### Pipeline Overview
+
+  The CI pipeline runs in two parallel jobs:
+
+  #### 1. **Lint, Format, Unit Tests & Build** (`unit_lint_build`)
+
+  Runs on every push and pull request.
+
+  **Steps**:
+  - ✅ Code format check (Prettier)
+  - ✅ Linting (ESLint)
+  - ✅ Unit & component tests (Vitest)
+  - ✅ Production build (TypeScript + Vite)
+
+  **Fails if any step fails** - prevents merging broken code.
+
+  #### 2. **E2E Tests** (`e2e`)
+
+  Runs **after** `unit_lint_build` succeeds, ensuring the app builds before testing.
+
+  **Steps**:
+  - ✅ Install Playwright browsers
+  - ✅ Build production bundle
+  - ✅ Run E2E tests (Playwright)
+  - ✅ Upload test report on failure
+
+  **Timeout**: 20 minutes
+
+  **Artifacts**: On failure, uploads `playwright-report/` for debugging.
+
+  ### Configuration
+
+  **File**: [`.github/workflows/ci.yml`](.github/workflows/ci.yml)
+
+  **Key settings**:
+  - **Node.js**: 20
+  - **pnpm**: 9
+  - **Concurrency**: Cancels previous runs on new push (faster feedback)
+  - **Cache**: Uses pnpm lock file for fast dependency installation
+
+  ### Running Locally Before Push
+
+  To match CI behavior locally:
+
+  ```bash
+  # Format check
+  pnpm format:check
+
+  # Lint
+  pnpm lint
+
+  # Unit tests
+  pnpm test
+
+  # Build (TypeScript check + bundle)
+  pnpm build
+
+  # E2E tests (optional, slower)
+  pnpm e2e
+
+  # Or run all at once:
+  pnpm format:check && pnpm lint && pnpm test && pnpm build && pnpm e2e
+  ```
+  ### Playwright Report
+
+When E2E tests fail in CI, an artifact is uploaded. To view:
+
+1. Go to GitHub Actions run
+2. Scroll to "Artifacts" section
+3. Download `playwright-report`
+4. Extract and open `index.html` in browser
+5. See failed test trace, screenshots, video
+
+**Skipping CI (Not Recommended)**
+Add `[skip ci]` to commit message to skip pipeline:
+
+```bash
+git commit -m "docs: update README [skip ci]"
+```
