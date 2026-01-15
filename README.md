@@ -112,53 +112,80 @@ See seedData.ts for default incidents and users.
 ## Project Structure
 
 ```
-src/
-├── api/                                  # Data layer & mock API
-│ ├── index.ts                            # Public API exports
-│ ├── mockApi.ts                          # HTTP interceptor (300ms delay)
-│ ├── seedData.ts                         # Default incidents & users
-│ ├── storage.ts                          # localStorage abstraction
-│ ├── types.ts                            # Incident, User, status types
-│ └── mockApi.test.ts                     # API behavior tests
+.
+├── .github/
+│   └── workflows/
+│       └── ci.yml                # CI/CD pipeline configuration
+├── .gitignore
+├── .prettierignore
+├── .prettierrc
+├── e2e/                          # End-to-end tests (Playwright)
+│   └── incidents/
+│       └── incidents.spec.ts     # E2E test flows
+├── eslint.config.js              # ESLint configuration
+├── index.html                    # HTML entry point
+├── package.json                  # Dependencies & scripts
+├── package-lock.json
+├── pnpm-lock.yaml                # pnpm lock file
+├── playwright.config.ts          # Playwright E2E configuration
+├── public/                       # Static assets
+├── README.md                     # Project documentation
+├── src/
+│   ├── api/                      # Data layer & mock API
+│   │   ├── index.ts              # Public API exports
+│   │   ├── mockApi.ts            # HTTP interceptor (300ms delay)
+│   │   ├── mockApi.test.ts       # API behavior tests
+│   │   ├── seedData.ts           # Default incidents & users
+│   │   ├── storage.ts            # localStorage abstraction
+│   │   └── types.ts              # Incident, User, status types
+│   │
+│   ├── services/                 # Business logic & fetch wrappers
+│   │   ├── http.ts               # fetchJson() helper with error handling
+│   │   ├── incidents.ts          # CRUD operations for incidents
+│   │   └── users.ts              # User listing service
+│   │
+│   ├── features/incidents/       # Feature-scoped components & logic
+│   │   ├── IncidentsPage.tsx     # Main page with filtering/sorting
+│   │   ├── hooks/
+│   │   │   └── index.ts          # React Query hooks & query keys
+│   │   ├── components/
+│   │   │   ├── CreateIncidentModal.tsx      # Form for new incidents (Zod validation)
+│   │   │   ├── IncidentDetailDrawer.tsx     # Read-only details sidebar
+│   │   │   ├── IncidentEditPanel.tsx        # In-drawer edit form
+│   │   │   ├── IncidentFiltersBar.tsx       # Query, status, severity, assignee filters
+│   │   │   ├── IncidentReadOnlyDetails.tsx  # Details display component
+│   │   │   └── IncidentTable.tsx            # Sortable/paginated table
+│   │   └── ___tests___/          # Component & integration tests
+│   │       ├── CreateIncidentModal.test.tsx
+│   │       └── IncidentsPage.test.tsx
+│   │
+│   ├── components/
+│   │   └── AppShell.tsx          # Header layout with brand & title
+│   │
+│   ├── lib/
+│   │   ├── queryClient.ts        # React Query configuration
+│   │   ├── theme/
+│   │   │   └── antdTheme.ts      # Danske Bank brand colors & Ant Design customization
+│   │   └── i18n/
+│   │       ├── index.ts          # i18next initialization
+│   │       └── locales/
+│   │           └── en.json       # English translations
+│   │
+│   ├── test/
+│   │   ├── setup.ts              # Vitest setup (polyfills: matchMedia, ResizeObserver)
+│   │   └── render.tsx            # Test utilities (renderWithProviders)
+│   │
+│   ├── App.css
+│   ├── App.test.tsx              # App component test
+│   ├── App.tsx                   # Router & route definitions
+│   ├── index.css                 # Global styles
+│   ├── main.tsx                  # React entry point & provider setup
+│   └── vite-env.d.ts             # Vite type definitions
 │
-├── services/                             # Business logic & fetch wrappers
-│ ├── http.ts                             # fetchJson() helper with error handling
-│ ├── incidents.ts                        # CRUD operations for incidents
-│ └── users.ts                            # User listing service
-│
-├── features/incidents/                   # Feature-scoped components & logic
-│ ├── IncidentsPage.tsx                   # Main page with filtering/sorting
-│ ├── hooks/
-│ │ └── index.ts                          # React Query hooks & query keys
-│ ├── components/
-│ │ ├── IncidentTable.tsx                 # Sortable/paginated table
-│ │ ├── IncidentFiltersBar.tsx            # Query, status, severity, assignee filters
-│ │ ├── CreateIncidentModal.tsx           # Form for new incidents (Zod validation)
-│ │ ├── IncidentDetailDrawer.tsx          # Read-only details sidebar
-│ │ ├── IncidentEditPanel.tsx             # In-drawer edit form
-│ │ └── IncidentReadOnlyDetails.tsx
-│ └── __tests__/                          # Component & integration tests
-│
-├── components/
-│ └── AppShell.tsx                        # Header layout with brand & title
-│
-├── lib/
-│ ├── queryClient.ts                      # React Query configuration
-│ ├── theme/
-│ │ └── antdTheme.ts                      # Danske Bank brand colors & Ant Design customization
-│ └── i18n/
-│ ├── index.ts                            # i18next initialization
-│ └── locales/
-│ └── en.json                             # English translations
-│
-├── test/
-│ ├── setup.ts                            # Vitest setup (polyfills: matchMedia, ResizeObserver)
-│ └── render.tsx                          # Test utilities (renderWithProviders)
-│
-├── App.tsx                               # Router & route definitions
-├── main.tsx                              # React entry point & provider setup
-├── index.css                             # Global styles
-└── App.css
+├── test-results/                 # Playwright test artifacts (generated)
+├── tsconfig.json                 # TypeScript configuration
+├── vite.config.ts                # Vite build configuration
+└── vitest.config.ts              # Vitest unit test configuration
 ```
 
 ## Key Design Decisions
@@ -278,3 +305,91 @@ Compact view with collapsed filters and modal details
   - Table scrolls horizontally on small screens
   - Incident details open in full-screen modal
   - Touch-friendly button sizes (40px min height)
+
+## CI/CD Pipeline
+
+The project uses **GitHub Actions** for automated testing and validation on every push and pull request.
+
+### Pipeline Overview
+
+The CI pipeline runs in two parallel jobs:
+
+#### 1. **Lint, Format, Unit Tests & Build** (`unit_lint_build`)
+
+Runs on every push and pull request.
+
+**Steps**:
+
+- ✅ Code format check (Prettier)
+- ✅ Linting (ESLint)
+- ✅ Unit & component tests (Vitest)
+- ✅ Production build (TypeScript + Vite)
+
+**Fails if any step fails** - prevents merging broken code.
+
+#### 2. **E2E Tests** (`e2e`)
+
+Runs **after** `unit_lint_build` succeeds, ensuring the app builds before testing.
+
+**Steps**:
+
+- ✅ Install Playwright browsers
+- ✅ Build production bundle
+- ✅ Run E2E tests (Playwright)
+- ✅ Upload test report on failure
+
+**Timeout**: 20 minutes
+
+**Artifacts**: On failure, uploads `playwright-report/` for debugging.
+
+### Configuration
+
+**File**: [`.github/workflows/ci.yml`](.github/workflows/ci.yml)
+
+**Key settings**:
+
+- **Node.js**: 20
+- **pnpm**: 9
+- **Concurrency**: Cancels previous runs on new push (faster feedback)
+- **Cache**: Uses pnpm lock file for fast dependency installation
+
+### Running Locally Before Push
+
+To match CI behavior locally:
+
+```bash
+# Format check
+pnpm format:check
+
+# Lint
+pnpm lint
+
+# Unit tests
+pnpm test
+
+# Build (TypeScript check + bundle)
+pnpm build
+
+# E2E tests (optional, slower)
+pnpm e2e
+
+# Or run all at once:
+pnpm format:check && pnpm lint && pnpm test && pnpm build && pnpm e2e
+```
+
+### Playwright Report
+
+When E2E tests fail in CI, an artifact is uploaded. To view:
+
+1. Go to GitHub Actions run
+2. Scroll to "Artifacts" section
+3. Download `playwright-report`
+4. Extract and open `index.html` in browser
+5. See failed test trace, screenshots, video
+
+**Skipping CI (Not Recommended)**
+Add `[skip ci]` to commit message to skip pipeline:
+
+```bash
+git commit -m "docs: update README [skip ci]"
+```
