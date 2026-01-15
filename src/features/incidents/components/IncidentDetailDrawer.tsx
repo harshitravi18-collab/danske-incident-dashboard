@@ -30,13 +30,19 @@ export function IncidentDetailDrawer({
       onClose={onClose}
       size={520}
       destroyOnHidden
+      data-testid="incident-detail-drawer"
     >
       {q.isLoading ? (
         <div>{t("drawer.loading")}</div>
       ) : q.isError ? (
         <div>
           <div style={{ marginBottom: 12 }}>{t("drawer.loadError")}</div>
-          <Button onClick={() => q.refetch()}>{t("common.retry")}</Button>
+          <Button
+            data-testid="incident-detail-drawer-retry-button"
+            onClick={() => q.refetch()}
+          >
+            {t("common.retry")}
+          </Button>
         </div>
       ) : q.data ? (
         <>

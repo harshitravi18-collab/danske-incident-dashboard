@@ -63,6 +63,7 @@ export function IncidentTable({ incidents, usersById, onSelect }: Props) {
 
   return (
     <Table<Incident>
+      data-testid="incident-table"
       rowKey="id"
       columns={columns}
       dataSource={incidents}

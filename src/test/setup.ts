@@ -1,5 +1,10 @@
-import "@testing-library/jest-dom/vitest";
 import "../lib/i18n";
+import "@testing-library/jest-dom";
+
+const original = window.getComputedStyle;
+
+window.getComputedStyle = (elt: Element) =>
+  original ? original(elt) : ({} as CSSStyleDeclaration);
 
 // matchMedia (used by responsive components)
 if (!window.matchMedia) {

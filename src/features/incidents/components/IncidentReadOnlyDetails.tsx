@@ -26,7 +26,10 @@ export function IncidentReadOnlyDetails({ incident, usersById }: Props) {
   return (
     <>
       <Descriptions bordered column={1} size="small">
-        <Descriptions.Item label={t("table.title")}>
+        <Descriptions.Item
+          label={t("table.title")}
+          data-testid="incident-detail-title"
+        >
           {incident.title}
         </Descriptions.Item>
 
