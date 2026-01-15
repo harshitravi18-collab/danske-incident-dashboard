@@ -246,6 +246,8 @@ What I'd Prioritize First
 
 <img width="1917" height="877" alt="image" src="https://github.com/user-attachments/assets/0e1d2920-9da1-4fee-a302-96fa270ea46e" />
 <img width="1919" height="910" alt="image" src="https://github.com/user-attachments/assets/45872708-53a4-47b9-b62f-35055fbaea06" />
+<img width="1621" height="878" alt="image" src="https://github.com/user-attachments/assets/78b645a2-bfa0-44e0-a1b7-1845e0bcf612" />
+
 Team Incident Dashboard - Desktop
 
 Incidents table with filtering, sorting, and detail drawer (right sidebar)
