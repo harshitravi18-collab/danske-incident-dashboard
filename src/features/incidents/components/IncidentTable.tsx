@@ -1,6 +1,6 @@
 import { Table, Tag } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import type { Incident } from "../../../api/types";
+import type { Incident } from "@api/types";
 import { useTranslation } from "react-i18next";
 
 type Props = {

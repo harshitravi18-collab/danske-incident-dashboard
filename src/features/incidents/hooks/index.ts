@@ -1,12 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { CreateIncidentInput, UpdateIncidentInput } from "../../api/types";
+import type { CreateIncidentInput, UpdateIncidentInput } from "@api/types";
 import {
   createIncident,
   getIncident,
   listIncidents,
   updateIncident,
-} from "../../services/incidents";
-import { listUsers } from "../../services/users";
+} from "@services/incidents";
+import { listUsers } from "@services/users";
 
 export const qk = {
   incidents: ["incidents"] as const,

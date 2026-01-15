@@ -1,5 +1,5 @@
 import { Outlet, useNavigate, useParams } from "react-router-dom";
-import type { Incident } from "../../api/types";
+import type { Incident } from "@api/types";
 import { useIncidentsQuery, useUsersQuery } from "./hooks";
 import {
   IncidentFiltersBar,
@@ -94,11 +94,19 @@ export function IncidentsPage() {
     <div className="page">
       <header className="pageHeader">
         <div>
-          <h1 className="h1">{t("app.title")}</h1>
-          <p className="muted">{t("app.subtitle")}</p>
+          <h1 className="h1" data-testid="app-title">
+            {t("app.title")}
+          </h1>
+          <p className="muted" data-testid="app-subtitle">
+            {t("app.subtitle")}
+          </p>
         </div>
         <div className="headerRight">
-          <Button type="primary" onClick={() => setCreateOpen(true)}>
+          <Button
+            type="primary"
+            data-testid="create-incident-button"
+            onClick={() => setCreateOpen(true)}
+          >
             {t("create.open")}
           </Button>
         </div>
@@ -121,7 +129,11 @@ export function IncidentsPage() {
         ) : incidentsQ.isError ? (
           <div className="state error">
             <div>{t("common.error")}</div>
-            <button className="btn" onClick={() => incidentsQ.refetch()}>
+            <button
+              className="btn"
+              data-testid="incidents-retry-button"
+              onClick={() => incidentsQ.refetch()}
+            >
               {t("common.retry")}
             </button>
           </div>

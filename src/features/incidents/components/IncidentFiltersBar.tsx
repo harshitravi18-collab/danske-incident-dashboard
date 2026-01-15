@@ -1,9 +1,5 @@
 import { Input, Select, Space } from "antd";
-import type {
-  IncidentStatus,
-  IncidentSeverity,
-  User,
-} from "../../../api/types";
+import type { IncidentStatus, IncidentSeverity, User } from "@api/types";
 import type { SortKey } from "../IncidentsPage";
 import { useTranslation } from "react-i18next";
 

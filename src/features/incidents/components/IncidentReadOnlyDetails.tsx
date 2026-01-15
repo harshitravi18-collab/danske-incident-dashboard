@@ -1,5 +1,5 @@
 import { Descriptions, List, Tag } from "antd";
-import type { Incident, IncidentStatus } from "../../../api/types";
+import type { Incident, IncidentStatus } from "@api/types";
 import { useTranslation } from "react-i18next";
 
 type Props = {
