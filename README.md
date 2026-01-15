@@ -112,53 +112,80 @@ See seedData.ts for default incidents and users.
 ## Project Structure
 
 ```
-src/
-├── api/                                  # Data layer & mock API
-│ ├── index.ts                            # Public API exports
-│ ├── mockApi.ts                          # HTTP interceptor (300ms delay)
-│ ├── seedData.ts                         # Default incidents & users
-│ ├── storage.ts                          # localStorage abstraction
-│ ├── types.ts                            # Incident, User, status types
-│ └── mockApi.test.ts                     # API behavior tests
+.
+├── .github/
+│   └── workflows/
+│       └── ci.yml                # CI/CD pipeline configuration
+├── .gitignore
+├── .prettierignore
+├── .prettierrc
+├── e2e/                          # End-to-end tests (Playwright)
+│   └── incidents/
+│       └── incidents.spec.ts     # E2E test flows
+├── eslint.config.js              # ESLint configuration
+├── index.html                    # HTML entry point
+├── package.json                  # Dependencies & scripts
+├── package-lock.json
+├── pnpm-lock.yaml                # pnpm lock file
+├── playwright.config.ts          # Playwright E2E configuration
+├── public/                       # Static assets
+├── README.md                     # Project documentation
+├── src/
+│   ├── api/                      # Data layer & mock API
+│   │   ├── index.ts              # Public API exports
+│   │   ├── mockApi.ts            # HTTP interceptor (300ms delay)
+│   │   ├── mockApi.test.ts       # API behavior tests
+│   │   ├── seedData.ts           # Default incidents & users
+│   │   ├── storage.ts            # localStorage abstraction
+│   │   └── types.ts              # Incident, User, status types
+│   │
+│   ├── services/                 # Business logic & fetch wrappers
+│   │   ├── http.ts               # fetchJson() helper with error handling
+│   │   ├── incidents.ts          # CRUD operations for incidents
+│   │   └── users.ts              # User listing service
+│   │
+│   ├── features/incidents/       # Feature-scoped components & logic
+│   │   ├── IncidentsPage.tsx     # Main page with filtering/sorting
+│   │   ├── hooks/
+│   │   │   └── index.ts          # React Query hooks & query keys
+│   │   ├── components/
+│   │   │   ├── CreateIncidentModal.tsx      # Form for new incidents (Zod validation)
+│   │   │   ├── IncidentDetailDrawer.tsx     # Read-only details sidebar
+│   │   │   ├── IncidentEditPanel.tsx        # In-drawer edit form
+│   │   │   ├── IncidentFiltersBar.tsx       # Query, status, severity, assignee filters
+│   │   │   ├── IncidentReadOnlyDetails.tsx  # Details display component
+│   │   │   └── IncidentTable.tsx            # Sortable/paginated table
+│   │   └── ___tests___/          # Component & integration tests
+│   │       ├── CreateIncidentModal.test.tsx
+│   │       └── IncidentsPage.test.tsx
+│   │
+│   ├── components/
+│   │   └── AppShell.tsx          # Header layout with brand & title
+│   │
+│   ├── lib/
+│   │   ├── queryClient.ts        # React Query configuration
+│   │   ├── theme/
+│   │   │   └── antdTheme.ts      # Danske Bank brand colors & Ant Design customization
+│   │   └── i18n/
+│   │       ├── index.ts          # i18next initialization
+│   │       └── locales/
+│   │           └── en.json       # English translations
+│   │
+│   ├── test/
+│   │   ├── setup.ts              # Vitest setup (polyfills: matchMedia, ResizeObserver)
+│   │   └── render.tsx            # Test utilities (renderWithProviders)
+│   │
+│   ├── App.css
+│   ├── App.test.tsx              # App component test
+│   ├── App.tsx                   # Router & route definitions
+│   ├── index.css                 # Global styles
+│   ├── main.tsx                  # React entry point & provider setup
+│   └── vite-env.d.ts             # Vite type definitions
 │
-├── services/                             # Business logic & fetch wrappers
-│ ├── http.ts                             # fetchJson() helper with error handling
-│ ├── incidents.ts                        # CRUD operations for incidents
-│ └── users.ts                            # User listing service
-│
-├── features/incidents/                   # Feature-scoped components & logic
-│ ├── IncidentsPage.tsx                   # Main page with filtering/sorting
-│ ├── hooks/
-│ │ └── index.ts                          # React Query hooks & query keys
-│ ├── components/
-│ │ ├── IncidentTable.tsx                 # Sortable/paginated table
-│ │ ├── IncidentFiltersBar.tsx            # Query, status, severity, assignee filters
-│ │ ├── CreateIncidentModal.tsx           # Form for new incidents (Zod validation)
-│ │ ├── IncidentDetailDrawer.tsx          # Read-only details sidebar
-│ │ ├── IncidentEditPanel.tsx             # In-drawer edit form
-│ │ └── IncidentReadOnlyDetails.tsx
-│ └── __tests__/                          # Component & integration tests
-│
-├── components/
-│ └── AppShell.tsx                        # Header layout with brand & title
-│
-├── lib/
-│ ├── queryClient.ts                      # React Query configuration
-│ ├── theme/
-│ │ └── antdTheme.ts                      # Danske Bank brand colors & Ant Design customization
-│ └── i18n/
-│ ├── index.ts                            # i18next initialization
-│ └── locales/
-│ └── en.json                             # English translations
-│
-├── test/
-│ ├── setup.ts                            # Vitest setup (polyfills: matchMedia, ResizeObserver)
-│ └── render.tsx                          # Test utilities (renderWithProviders)
-│
-├── App.tsx                               # Router & route definitions
-├── main.tsx                              # React entry point & provider setup
-├── index.css                             # Global styles
-└── App.css
+├── test-results/                 # Playwright test artifacts (generated)
+├── tsconfig.json                 # TypeScript configuration
+├── vite.config.ts                # Vite build configuration
+└── vitest.config.ts              # Vitest unit test configuration
 ```
 
 ## Key Design Decisions
