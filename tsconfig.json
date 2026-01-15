@@ -26,5 +26,5 @@
       "@test/*": ["test/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "e2e"]
 }
