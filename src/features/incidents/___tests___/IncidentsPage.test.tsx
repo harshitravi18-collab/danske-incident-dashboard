@@ -65,6 +65,6 @@ describe("IncidentsPage", () => {
     expect(
       await screen.findByText(/something went wrong/i),
     ).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /retry/i })).toBeInTheDocument();
+    expect(screen.getByTestId("incidents-retry-button")).toBeInTheDocument();
   });
 });
