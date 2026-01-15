@@ -8,13 +8,13 @@ type Props = {
   usersById: Record<string, string>;
   onSelect: (id: string) => void;
 };
-const STATUS_COLOR: Record<Incident["status"], string> = {
+export const STATUS_COLOR: Record<Incident["status"], string> = {
   Open: "red",
   "In Progress": "orange",
   Resolved: "green",
 };
 
-const SEVERITY_COLOR: Record<Incident["severity"], string> = {
+export const SEVERITY_COLOR: Record<Incident["severity"], string> = {
   Low: "blue",
   Medium: "gold",
   High: "orange",

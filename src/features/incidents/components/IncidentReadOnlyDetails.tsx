@@ -1,23 +1,11 @@
 import { Descriptions, List, Tag } from "antd";
-import type { Incident, IncidentStatus } from "@api/types";
+import type { Incident } from "@api/types";
 import { useTranslation } from "react-i18next";
+import { SEVERITY_COLOR, STATUS_COLOR } from "./IncidentTable";
 
 type Props = {
   incident: Incident;
   usersById: Record<string, string>;
-};
-
-const STATUS_COLOR: Record<IncidentStatus, string> = {
-  Open: "red",
-  "In Progress": "gold",
-  Resolved: "green",
-};
-
-const SEVERITY_COLOR: Record<Incident["severity"], string> = {
-  Low: "blue",
-  Medium: "gold",
-  High: "orange",
-  Critical: "red",
 };
 
 export function IncidentReadOnlyDetails({ incident, usersById }: Props) {
@@ -71,7 +59,9 @@ export function IncidentReadOnlyDetails({ incident, usersById }: Props) {
           locale={{ emptyText: t("drawer.noHistory") }}
           renderItem={(h) => (
             <List.Item>
-              <Tag>{t(`status.${h.status}`, h.status)}</Tag>
+              <Tag color={STATUS_COLOR[incident.status]}>
+                {t(`status.${h.status}`, h.status)}
+              </Tag>
               <span style={{ marginLeft: 8 }}>
                 {new Date(h.changedAt).toLocaleString()}
               </span>
